@@ -57,7 +57,15 @@ echo "Creating Custom ISO"
 if [ ! -e "${FOLDER_ISO}/custom.iso" ]; then
 
   echo "Untarring downloaded ISO ..."
-  tar -C "${FOLDER_ISO_CUSTOM}" -xf "${ISO_FILENAME}"
+  if [ sw_vers | grep ProductVersion | awk '{print $2}' == 10.7.4 ]; then
+    echo "Brew installing new bsdtar for version 10.7.4..."
+    brew install https://raw.github.com/oschrenk/homebrew-dupes/edbc2b464d0bf4420508297418481178299f420a/libarchive.rb
+    echo "Now untarring downloaded ISO..."
+    /usr/local/bin/bsdtar -C "${FOLDER_ISO_CUSTOM}" -xf "${ISO_FILENAME}"
+  else
+    tar -C "${FOLDER_ISO_CUSTOM}" -xf "${ISO_FILENAME}"
+  fi
+
 
   # backup initrd.gz
   echo "Backing up current init.rd ..."
