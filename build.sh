@@ -11,6 +11,7 @@ set -o errexit
 BOX="ubuntu-precise-64"
 ISO_URL="http://releases.ubuntu.com/12.04/ubuntu-12.04.1-alternate-amd64.iso"
 ISO_MD5="682b0388d2a15bf9f38480b0eb4653f6"
+OSX_VERSION="$(sw_vers | grep ProductVersion | awk '{print $2}')"
 
 # location, location, location
 FOLDER_BASE=`pwd`
@@ -57,9 +58,10 @@ echo "Creating Custom ISO"
 if [ ! -e "${FOLDER_ISO}/custom.iso" ]; then
 
   echo "Untarring downloaded ISO ..."
-  if [ sw_vers | grep ProductVersion | awk '{print $2}' == 10.7.4 ]; then
-    echo "Brew installing new bsdtar for version 10.7.4..."
-    brew install https://raw.github.com/oschrenk/homebrew-dupes/edbc2b464d0bf4420508297418481178299f420a/libarchive.rb
+
+  if [ ${OSX_VERSION} == 10.7.4 ]; then
+    echo "Please brew install: https://raw.github.com/oschrenk/homebrew-dupes/edbc2b464d0bf4420508297418481178299f420a/libarchive.rb"
+    echo "You can read more at: https://github.com/cal/vagrant-ubuntu-precise-64/issues/7#issuecomment-7506777"
     echo "Now untarring downloaded ISO..."
     /usr/local/bin/bsdtar -C "${FOLDER_ISO_CUSTOM}" -xf "${ISO_FILENAME}"
   else
